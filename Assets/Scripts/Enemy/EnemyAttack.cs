@@ -6,6 +6,7 @@ public class EnemyAttack : MonoBehaviour
     public float timeBetweenAttacks = 0.5f;
     public int attackDamage = 10;
 
+    [SerializeField] SphereCollider m_attackTrigger;
 
     Animator anim;
     GameObject player;
@@ -23,15 +24,21 @@ public class EnemyAttack : MonoBehaviour
         anim = GetComponent <Animator> ();
     }
 
-
-    void OnTriggerEnter (Collider other)
-    {
-        if(other.gameObject == player)
+    private void OnCollisionStay(Collision collision) {
+        if(collision.gameObject == player)
         {
             playerInRange = true;
         }
     }
-
+    // original of this was:
+    //private void OnTriggerEnter(Collider other) {
+    //    if (other.gameObject == player) {
+    //        playerInRange = true;
+    //    }
+    //}
+    // changed this from "OnTriggerEnter" to "OnCollisionStay" so that it can
+    // have 2 triggers: the bigger sphere collider triggers its alertness, while
+    // the smaller sphere collider (this one) triggers the enemy to damage the player.
 
     void OnTriggerExit (Collider other)
     {
